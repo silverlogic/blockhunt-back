@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 from django.contrib.gis.geos import Point
+
 import factory
 import factory.fuzzy
 
@@ -24,6 +27,7 @@ class StoreFactory(factory.DjangoModelFactory):
     photo = factory.django.ImageField()
     category = factory.SubFactory('tests.factories.StoreCategoryFactory')
     website = 'https://dennys.com'
+    bounty = Decimal('0.1')
 
     class Meta:
         model = 'stores.Store'

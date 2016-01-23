@@ -35,7 +35,7 @@ class StoreSerializer(ExpanderSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = Store
         fields = ('id', 'name', 'category', 'address', 'photo', 'website', 'tagline',
-                  'distance')
+                  'distance', 'bounty')
         expandable_fields = {
             'category': StoreCategorySerializer
         }

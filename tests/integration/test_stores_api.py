@@ -32,9 +32,9 @@ pytestmark = pytest.mark.django_db
 class TestStoreList(ApiMixin):
     view_name = 'store-list'
 
-    def test_guest_cant_list(self, client):
+    def test_guest_can_list(self, client):
         r = client.get(self.reverse())
-        h.responseUnauthorized(r)
+        h.responseOk(r)
 
     def test_hunter_can_list(self, hunter_client):
         r = hunter_client.get(self.reverse())
@@ -75,10 +75,10 @@ class TestStoreList(ApiMixin):
 class TestStoreRetrieve(ApiMixin):
     view_name = 'store-detail'
 
-    def test_guest_cant_retrieve(self, client):
+    def test_guest_can_retrieve(self, client):
         store = f.StoreFactory()
         r = client.get(self.reverse(kwargs={'pk': store.pk}))
-        h.responseUnauthorized(r)
+        h.responseOk(r)
 
     def test_hunter_can_retrieve(self, hunter_client):
         store = f.StoreFactory()
@@ -95,7 +95,7 @@ class TestStoreRetrieve(ApiMixin):
         r = hunter_client.get(self.reverse(kwargs={'pk': store.pk}))
         h.responseOk(r)
         expected = {'id', 'name', 'category', 'address', 'photo', 'website', 'tagline',
-                    'distance'}
+                    'distance', 'bounty'}
         actual = set(r.data.keys())
         assert expected == actual
 
@@ -132,12 +132,31 @@ class TestStoreRetrieve(ApiMixin):
         assert isinstance(r.data['category'], dict)
 
 
+class TestStoreCategoryRetrieve(ApiMixin):
+    view_name = 'storecategory-detail'
+
+    def test_guest_can_retrieve(self, client):
+        category = f.StoreCategoryFactory()
+        r = client.get(self.reverse(kwargs={'pk': category.pk}))
+        h.responseOk(r)
+
+    def test_hunter_can_retrieve(self, hunter_client):
+        category = f.StoreCategoryFactory()
+        r = hunter_client.get(self.reverse(kwargs={'pk': category.pk}))
+        h.responseOk(r)
+
+    def test_store_owner_can_retrieve(self, store_owner_client):
+        category = f.StoreCategoryFactory()
+        r = store_owner_client.get(self.reverse(kwargs={'pk': category.pk}))
+        h.responseOk(r)
+
+
 class TestStoreCategoryList(ApiMixin):
     view_name = 'storecategory-list'
 
-    def test_guest_cant_list(self, client):
+    def test_guest_can_list(self, client):
         r = client.get(self.reverse())
-        h.responseUnauthorized(r)
+        h.responseOk(r)
 
     def test_hunter_can_list(self, hunter_client):
         r = hunter_client.get(self.reverse())

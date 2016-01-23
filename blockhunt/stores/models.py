@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.gis.db.models import PointField
+from django.core.exceptions import ValidationError
 
 from model_utils import Choices
 
@@ -14,6 +15,11 @@ class StoreOwner(User):
     pass
 
 
+def validate_bounty(value):
+    if value <= 0:
+        raise ValidationError('Bounty must be greater than 0.')
+
+
 class Store(models.Model):
     owner = models.ForeignKey('StoreOwner', related_name='stores')
     name = models.CharField(max_length=100)
@@ -21,6 +27,7 @@ class Store(models.Model):
     category = models.ForeignKey('StoreCategory', related_name='stores')
     website = models.URLField()
     tagline = models.CharField(max_length=50, blank=True)
+    bounty = models.DecimalField(max_digits=10, decimal_places=8, validators=[validate_bounty])
 
     def __str__(self):
         return self.name

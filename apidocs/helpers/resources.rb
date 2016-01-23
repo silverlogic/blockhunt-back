@@ -77,7 +77,8 @@ module Resources
       },
       website: 'https://dennys.com',
       tagline: 'Have some yummy in your tummy food',
-      distance: nil
+      distance: nil,
+      bounty: '0.00000009'
   }
 
   STORE_CATEGORY ||= {

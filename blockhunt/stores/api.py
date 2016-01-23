@@ -14,7 +14,7 @@ class StoreViewSet(mixins.RetrieveModelMixin,
                    viewsets.GenericViewSet):
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def filter_queryset(self, qs):
         coords = self.request.query_params.get('coords', None)
@@ -31,4 +31,4 @@ class StoreCategoryViewSet(mixins.RetrieveModelMixin,
                            viewsets.GenericViewSet):
     queryset = StoreCategory.objects.all()
     serializer_class = StoreCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
