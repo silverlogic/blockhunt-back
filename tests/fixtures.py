@@ -21,8 +21,7 @@ def client():
 
 @pytest.fixture
 def hunter_client():
-    # TODO
-    hunter = f.UserFactory()
+    hunter = f.HunterFactory()
     client = Client()
     client.force_authenticate(hunter)
     return client

@@ -1,0 +1,47 @@
+---
+title: Hunters
+---
+
+# Hunters
+
+* TOC
+{:toc}
+
+
+## Introduction
+
+A hunter is a user who hunts for bounties and then checks in to them.
+
+
+## Object
+
+Name | Type | Description
+---- | ---- | -----------
+`id` | `int` | unique identifier
+`email` | `string`
+`first_name` | `string`
+`last_name` | `string`
+
+<%= json :hunter %>
+
+
+## Create (Register)
+
+    POST /hunters
+
+### Input
+
+Name | Type | Description
+---- | ---- | -----------
+`email` | `string` | **Required**
+`password` | `string` | **Required**
+`first_name` | `string` | If a name is not provided then a random name will be assigned.
+`last_name` | `string` | If a name is not provided then a random name will be assigned.
+
+
+## Retrieve Current Hunter
+
+    GET /hunter
+
+
+[//]: # vim: set ft=markdown:

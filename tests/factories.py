@@ -18,6 +18,11 @@ class StoreOwnerFactory(UserFactory):
         model = 'stores.StoreOwner'
 
 
+class HunterFactory(UserFactory):
+    class Meta:
+        model = 'hunts.Hunter'
+
+
 class StoreFactory(factory.DjangoModelFactory):
     owner = factory.SubFactory('tests.factories.StoreOwnerFactory')
     name = factory.fuzzy.FuzzyText(length=25)
