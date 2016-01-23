@@ -76,7 +76,8 @@ module Resources
           url: 'https://google.ca/rawr.png'
       },
       website: 'https://dennys.com',
-      tagline: 'Have some yummy in your tummy food'
+      tagline: 'Have some yummy in your tummy food',
+      distance: nil
   }
 
   STORE_CATEGORY ||= {

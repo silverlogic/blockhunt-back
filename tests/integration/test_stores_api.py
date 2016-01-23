@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 import pytest
 
 import tests.factories as f
@@ -35,9 +36,40 @@ class TestStoreList(ApiMixin):
         r = client.get(self.reverse())
         h.responseUnauthorized(r)
 
+    def test_hunter_can_list(self, hunter_client):
+        r = hunter_client.get(self.reverse())
+        h.responseOk(r)
+
     def test_store_owner_can_list(self, store_owner_client):
         r = store_owner_client.get(self.reverse())
         h.responseOk(r)
+
+    def test_sorts_by_distance_when_coords_are_provided(self, hunter_client, client):
+        farthest = f.StoreFactory(address=True, address__coords=Point(200, 200))
+        closest = f.StoreFactory(address=True, address__coords=Point(51, 51))
+        medium = f.StoreFactory(address=True, address__coords=Point(100, 100))
+        r = hunter_client.get(self.reverse(query_params={'coords': '50,50'}))
+        h.responseOk(r)
+        assert r.data['count'] == 3
+        results = r.data['results']
+        assert results[0]['id'] == closest.pk
+        assert results[1]['id'] == medium.pk
+        assert results[2]['id'] == farthest.pk
+
+    def test_includes_distance_field_on_results(self, hunter_client, client):
+        f.StoreFactory(address=True, address__coords=Point(100, 100))
+        r = hunter_client.get(self.reverse(query_params={'coords': '50,50'}))
+        h.responseOk(r)
+        results = r.data['results']
+        assert results[0]['distance'] is not None
+
+    def test_doesnt_explode_if_bad_coords(self, hunter_client, client):
+        f.StoreFactory()
+        f.StoreFactory()
+        f.StoreFactory()
+        r = hunter_client.get(self.reverse(query_params={'coords': 'asd'}))
+        h.responseOk(r)
+        assert r.data['count'] == 3
 
 
 class TestStoreRetrieve(ApiMixin):
@@ -62,7 +94,8 @@ class TestStoreRetrieve(ApiMixin):
         store = f.StoreFactory()
         r = hunter_client.get(self.reverse(kwargs={'pk': store.pk}))
         h.responseOk(r)
-        expected = {'id', 'name', 'category', 'address', 'photo', 'website', 'tagline'}
+        expected = {'id', 'name', 'category', 'address', 'photo', 'website', 'tagline',
+                    'distance'}
         actual = set(r.data.keys())
         assert expected == actual
 
