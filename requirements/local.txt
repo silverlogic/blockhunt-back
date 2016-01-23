@@ -1,0 +1,6 @@
+-r ./base.txt
+dj-inmemorystorage==1.4.0
+flake8==2.5.1
+pytest==2.8.6
+pytest-django==2.9.1
+pytest-pythonpath==0.7
