@@ -67,3 +67,6 @@ class User(TimeStampedModel, AbstractBaseUser, PermissionsMixin, PolymorphicMode
 
     def get_full_name(self):
         return self.get_short_name()
+
+    def __str__(self):
+        return '{} {} {}'.format(self.email, self.first_name, self.last_name)

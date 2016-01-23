@@ -15,7 +15,7 @@ class random_name_in(object):
         return os.path.join(self.dir, filename)
 
     def deconstruct(self):
-        return 'utils.models.random_name_in', (), {'dir': self.dir}
+        return 'blockhunt.utils.models.random_name_in', (), {'dir': self.dir}
 
 
 class CaseInsensitiveTextField(fields.TextField):

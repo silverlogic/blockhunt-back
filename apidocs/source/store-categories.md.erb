@@ -1,0 +1,32 @@
+---
+title: Store Categories
+---
+
+# Store Categories
+
+* TOC
+{:toc}
+
+## Object
+
+Name | Type | Description
+---- | ---- | -----------
+`id` | `int` | unique identifier
+`name` | `string`
+`icon` | hash
+`icon[url]` | `string` | Absolute URL to the icon image.
+
+<%= json :store_category %>
+
+
+## Retrieve
+
+    GET /v1/store-categories/:id
+
+
+## List
+
+    GET /v1/store-categories
+
+
+[//]: # vim: set ft=markdown:

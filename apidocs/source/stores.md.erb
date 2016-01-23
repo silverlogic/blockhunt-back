@@ -1,0 +1,46 @@
+---
+title: Stores
+---
+
+# Stores
+
+* TOC
+{:toc}
+
+## Object
+
+Name | Type | Description
+---- | ---- | -----------
+`id` | `int` | Unique identifier
+`name` | `string`
+`category` | `int` | id of the [store category](/store-categories).  **expandable**
+`address` | `hash` | Where the store is located
+`address[line1]` | `string`
+`address[line2]` | `string`
+`address[line3]` | `string`
+`address[zip_code]` | `string`
+`address[city]` |`string`
+`address[state]` |`string`
+`address[country]` |`string`
+`address[coords]` | `hash` |
+`address[coords][lat]` | `number`
+`address[coords][long]` | `number`
+`photo` | `hash`
+`photo[url]` | `string` | Absolute URL for the store photo.
+`website` | `string` | URL of the stores website.
+`tagline` | `string`
+
+<%= json :store %>
+
+
+## Retrieve
+
+    GET /v1/stores/:id
+
+
+## List
+
+    GET /v1/stores
+
+
+[//]: # vim: set ft=markdown:

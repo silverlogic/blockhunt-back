@@ -48,6 +48,7 @@ THIRD_PARTY_APPS = [
 ]
 PROJECT_APPS = [
     'blockhunt.users',
+    'blockhunt.stores',
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
@@ -99,3 +100,22 @@ STATIC_URL = '/static/'
 STATIC_ROOT = str(BASE_DIR / 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = str(BASE_DIR / 'media')
+
+
+# Rest framework
+REST_FRAMEWORK = {
+    # 'DEFAULT_FILTER_BACKENDS': [
+    #     'rest_framework.filters.DjangoFilterBackend',
+    # ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # Used for API clients.
+        'timed_auth_token.authentication.TimedAuthTokenAuthentication',
+
+        # Used for browsable API.
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 25,
+    'SEARCH_PARAM': 'q',
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+}

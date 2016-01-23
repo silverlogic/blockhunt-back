@@ -2,8 +2,11 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from .routers import router
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^v1/', include(router.urls)),
     url(r'^v1/auth/', include('timed_auth_token.urls', namespace='auth')),
 ]
 
