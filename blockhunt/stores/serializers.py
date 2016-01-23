@@ -30,10 +30,12 @@ class StoreAddressSerializer(serializers.ModelSerializer):
 class StoreSerializer(ExpanderSerializerMixin, serializers.ModelSerializer):
     address = StoreAddressSerializer()
     photo = serializers.SerializerMethodField()
+    distance = serializers.SerializerMethodField()
 
     class Meta:
         model = Store
-        fields = ('id', 'name', 'category', 'address', 'photo', 'website', 'tagline')
+        fields = ('id', 'name', 'category', 'address', 'photo', 'website', 'tagline',
+                  'distance')
         expandable_fields = {
             'category': StoreCategorySerializer
         }
@@ -42,3 +44,8 @@ class StoreSerializer(ExpanderSerializerMixin, serializers.ModelSerializer):
         return {
             'url': obj.photo.url
         }
+
+    def get_distance(self, obj):
+        distance = getattr(obj, 'distance', None)
+        if distance:
+            return distance.mi

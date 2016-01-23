@@ -28,6 +28,11 @@ class StoreFactory(factory.DjangoModelFactory):
     class Meta:
         model = 'stores.Store'
 
+    @factory.post_generation
+    def address(self, create, extracted, **kwargs):
+        if extracted:
+            StoreAddressFactory(store=self, **kwargs)
+
 
 class StoreCategoryFactory(factory.DjangoModelFactory):
     name = factory.fuzzy.FuzzyText(length=10)

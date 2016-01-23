@@ -29,6 +29,7 @@ Name | Type | Description
 `photo[url]` | `string` | Absolute URL for the store photo.
 `website` | `string` | URL of the stores website.
 `tagline` | `string`
+`distance` | `number` | Only used when listing stores and coords are provided.  The distance from the provided coords in miles.
 
 <%= json :store %>
 
@@ -42,5 +43,11 @@ Name | Type | Description
 
     GET /v1/stores
 
+
+### Parameters
+
+Name | Type | Description
+---- | ---- | -----------
+`coords` | `string` | Sort stores by distance from the coords.  Closest first. Format: lat,long. e.g. ?coords=12,34
 
 [//]: # vim: set ft=markdown:
