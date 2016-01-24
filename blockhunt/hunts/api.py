@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from rest_framework import mixins, viewsets, permissions, decorators, status
 from rest_framework.response import Response
 
+import dj_coinbase
 from requests.exceptions import HTTPError
 from social.apps.django_app.utils import load_strategy, load_backend
 from social.exceptions import SocialAuthBaseException
@@ -12,7 +13,7 @@ from timed_auth_token.models import TimedAuthToken
 
 from .models import Hunter, Checkin
 from .serializers import HunterSerializer, HunterFacebookSerializer, \
-    CheckinSerializer
+    CheckinSerializer, SendBitcoinSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -59,6 +60,19 @@ class HunterSelfViewSet(mixins.ListModelMixin,
         user = self.request.user
         serializer = self.get_serializer(instance=user)
         return Response(serializer.data)
+
+    @decorators.list_route(methods=['POST'], url_path='send-bitcoin')
+    def send_bitcoin(self, request, *args, **kwargs):
+        serializer = SendBitcoinSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        hunter = request.user
+        dj_coinbase.client.send_money(
+            hunter.coinbase_account_id,
+            to=serializer.data['address'],
+            amount=serializer.data['amount'],
+            currency='BTC'
+        )
+        return Response()
 
 
 class CheckinViewSet(mixins.CreateModelMixin,

@@ -79,3 +79,16 @@ class CheckinSerializer(ExpanderSerializerMixin, serializers.ModelSerializer):
         store.balance = F('balance') - store.bounty
         store.save()
         return checkin
+
+
+class SendBitcoinSerializer(serializers.Serializer):
+    address = serializers.CharField()
+    amount = serializers.DecimalField(max_digits=12, decimal_places=8)
+
+    def validate_amount(self, amount):
+        hunter = self.context['request'].user
+        if amount > hunter.balance:
+            raise serializers.ValidationError('You don\'t own that many bitcoins.')
+        if amount <= 0:
+            raise serializers.ValidationError('You cannot send that many bitcoins.')
+        return amount
