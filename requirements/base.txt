@@ -5,6 +5,7 @@ django-polymorphic==0.8.1
 djangorestframework==3.3.2
 djangorestframework-expander==0.1.2
 djangorestframework-timed-auth-token==1.2.0
+geopy==1.11.0
 git+https://github.com/silverlogic/drf-extra-fields.git@c5845d4de9873950d65bad3f487a6dc62f544e08
 Pillow==3.1.0
 psycopg2==2.6.1
