@@ -80,7 +80,7 @@ class HunterSelfViewSet(mixins.ListModelMixin,
             raise serializers.ValidationError(ex.message)
         hunter.balance = F('balance') - serializer.data['amount']
         hunter.save()
-        return Response()
+        return Response({})
 
 
 class CheckinViewSet(mixins.CreateModelMixin,
