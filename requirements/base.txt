@@ -8,3 +8,4 @@ djangorestframework-timed-auth-token==1.2.0
 Pillow==3.1.0
 psycopg2==2.6.1
 python-social-auth==0.2.13
+qrcode==5.1

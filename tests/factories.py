@@ -62,3 +62,12 @@ class StoreAddressFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = 'stores.StoreAddress'
+
+
+class CheckinFactory(factory.DjangoModelFactory):
+    hunter = factory.SubFactory('tests.factories.HunterFactory')
+    store = factory.SubFactory('tests.factories.StoreFactory')
+    reward = Decimal('0.1')
+
+    class Meta:
+        model = 'hunts.Checkin'

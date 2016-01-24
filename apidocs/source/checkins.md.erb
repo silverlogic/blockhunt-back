@@ -1,0 +1,45 @@
+---
+title: Checkins
+---
+
+# Checkins
+
+* TOC
+{:toc}
+
+## Object
+
+Name | Type | Description
+---- | ---- | -----------
+`id` | `string` | unique identifier
+`store` | `int` | store id **expandable**
+`reward` | `number` | How many bitcons were rewarded for checking in.
+
+
+## Create
+
+    POST /checkins
+
+### Input
+
+Name | Type | Description
+---- | ---- | -----------
+`qrcode` | `string` | **Required** value received from scanning the QR code.
+`coords` | `hash` | **Required** Coordinates of the hunter when they scanned the QR code.
+`coords[lat]` | `number` | **Required**
+`coords[long]` | `number` | **Required**
+
+
+## Retrieve
+
+    GET /checkins/:id
+
+
+## List
+
+A list of the current hunter's checkins.
+
+    GET /checkins
+
+
+[//]: # vim: set ft=markdown:

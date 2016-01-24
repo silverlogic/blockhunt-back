@@ -10,8 +10,9 @@ from social.apps.django_app.utils import load_strategy, load_backend
 from social.exceptions import SocialAuthBaseException
 from timed_auth_token.models import TimedAuthToken
 
-from .models import Hunter
-from .serializers import HunterSerializer, HunterFacebookSerializer
+from .models import Hunter, Checkin
+from .serializers import HunterSerializer, HunterFacebookSerializer, \
+    CheckinSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -58,3 +59,17 @@ class HunterSelfViewSet(mixins.ListModelMixin,
         user = self.request.user
         serializer = self.get_serializer(instance=user)
         return Response(serializer.data)
+
+
+class CheckinViewSet(mixins.CreateModelMixin,
+                     mixins.RetrieveModelMixin,
+                     mixins.ListModelMixin,
+                     viewsets.GenericViewSet):
+    queryset = Checkin.objects.all()
+    serializer_class = CheckinSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(hunter=self.request.user)
+        return qs

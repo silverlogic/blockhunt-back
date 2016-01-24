@@ -27,6 +27,7 @@ class Store(models.Model):
     category = models.ForeignKey('StoreCategory', related_name='stores')
     website = models.URLField()
     tagline = models.CharField(max_length=50, blank=True)
+    balance = models.DecimalField(max_digits=14, decimal_places=8, default=0)
     bounty = models.DecimalField(max_digits=10, decimal_places=8, validators=[validate_bounty])
 
     def __str__(self):
