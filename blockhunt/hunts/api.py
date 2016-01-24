@@ -1,6 +1,7 @@
 import logging
 
 from django.core.urlresolvers import reverse
+from django.db.models import F
 
 from rest_framework import mixins, viewsets, permissions, decorators, status
 from rest_framework.response import Response
@@ -72,6 +73,8 @@ class HunterSelfViewSet(mixins.ListModelMixin,
             amount=serializer.data['amount'],
             currency='BTC'
         )
+        hunter.balance = F('balance') - serializer.data['amount']
+        hunter.save()
         return Response()
 
 
