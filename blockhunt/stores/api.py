@@ -47,7 +47,7 @@ class PngRenderer(renderers.BaseRenderer):
 
 class IsStoreOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.user == request.user
+        return obj.store_owner == request.user
 
 
 class StoreViewSet(MultiSerializerMixin,
