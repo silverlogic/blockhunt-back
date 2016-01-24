@@ -31,7 +31,7 @@ class HunterViewSet(mixins.CreateModelMixin,
         access_token = serializer.data['access_token']
 
         redirect_uri = reverse('social:complete', args=(psa_backend,))
-        social_strategy = load_strategy(self.context['request'])
+        social_strategy = load_strategy(request)
         psa_backend = load_backend(social_strategy, psa_backend, redirect_uri)
         try:
             user = psa_backend.do_auth(access_token)
