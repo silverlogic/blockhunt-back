@@ -1,5 +1,8 @@
 from django.contrib.gis.geos import Point
+
 import pytest
+
+from blockhunt.stores.models import StoreOwner, Store, StoreAddress
 
 import tests.factories as f
 import tests.helpers as h
@@ -7,6 +10,63 @@ from tests.mixins import ApiMixin
 
 
 pytestmark = pytest.mark.django_db
+
+
+class TestStoreCreate(ApiMixin):
+    view_name = 'store-list'
+
+    @pytest.fixture
+    def data(self, image):
+        category = f.StoreCategoryFactory()
+        return {
+            'email': 'ry@tsl.io',
+            'password': 'blub',
+            'store_name': 'The Pub',
+            'category': category.pk,
+            'address': {
+                'line1': '400 NW 26th St',
+                'zip_code': '33127',
+                'city': 'Miami',
+                'state': 'Florida',
+                'country': 'us'
+            },
+            'photo': image,
+            'website': 'https://google.ca',
+            'bounty': '0.001'
+        }
+
+    def test_guest_can_create(self, client, data):
+        r = client.post(self.reverse(), data)
+        h.responseCreated(r)
+
+    def test_creates_store_owner(self, client, data):
+        r = client.post(self.reverse(), data)
+        h.responseCreated(r)
+        assert StoreOwner.objects.count() == 1
+
+    def test_sets_store_owner_password(self, client, data):
+        r = client.post(self.reverse(), data)
+        h.responseCreated(r)
+        assert StoreOwner.objects.get().check_password(data['password'])
+
+    def test_creates_store(self, client, data):
+        r = client.post(self.reverse(), data)
+        h.responseCreated(r)
+        assert Store.objects.count() == 1
+
+    def test_creates_store_address(self, client, data):
+        r = client.post(self.reverse(), data)
+        h.responseCreated(r)
+        assert StoreAddress.objects.count() == 1
+
+    def test_geocodes_store_address(self, client, data):
+        pass
+
+    def test_email_cant_already_be_taken(self, client, data):
+        f.StoreOwnerFactory(email=data['email'])
+        r = client.post(self.reverse(), data)
+        h.responseBadRequest(r)
+        assert r.data['email'] == ['That email address is already in use.']
 
 
 class TestStoreList(ApiMixin):

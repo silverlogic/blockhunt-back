@@ -35,6 +35,33 @@ Name | Type | Description
 <%= json :store %>
 
 
+## Create
+
+Create a store owner with a store.
+
+    POST /v1/stores
+
+### Input
+
+Name | Type | Description
+---- | ---- | -----------
+`email` | `string
+`password` | `string`
+`store_name` | `string`
+`category` | `int`
+`address` | `hash`
+`address[line1]` | `string`
+`address[line2]` | `string`
+`address[line3]` | `string`
+`address[zip_code]` | `string`
+`address[city]` |`string`
+`address[state]` |`string`
+`address[country]` |`string`
+`photo` | `string` | base64 encoded image
+`website` | `string`
+`bounty` | `number`
+
+
 ## Retrieve
 
     GET /v1/stores/:id

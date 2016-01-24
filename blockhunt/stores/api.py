@@ -10,7 +10,28 @@ from rest_framework.response import Response
 import qrcode
 
 from .models import Store, StoreCategory
-from .serializers import StoreSerializer, StoreCategorySerializer
+from .serializers import StoreSerializer, StoreCategorySerializer, StoreCreateSerializer
+
+
+class MultiSerializerMixin:
+    '''Allows a different serializer class for each view action.
+
+    To control what serializer gets used override the serializer_class dict.  The key
+    is the action name and the value is the serializer class.  If the action is not
+    specified then it will use `self.serializer_class`.
+
+    The default actions are:
+        - create
+        - retrieve
+        - update
+        - partial_update
+        - list
+
+    '''
+    serializer_classes = {}
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.serializer_class)
 
 
 class PngRenderer(renderers.BaseRenderer):
@@ -23,12 +44,16 @@ class PngRenderer(renderers.BaseRenderer):
         return data
 
 
-class StoreViewSet(mixins.RetrieveModelMixin,
+class StoreViewSet(MultiSerializerMixin,
+                   mixins.CreateModelMixin,
+                   mixins.RetrieveModelMixin,
                    mixins.ListModelMixin,
                    viewsets.GenericViewSet):
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    serializer_classes = {
+        'create': StoreCreateSerializer
+    }
 
     def filter_queryset(self, qs):
         coords = self.request.query_params.get('coords', None)
