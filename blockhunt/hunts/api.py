@@ -27,7 +27,7 @@ class HunterViewSet(mixins.CreateModelMixin,
         serializer = HunterFacebookSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        psa_backend = 'FacebookOAuth2'
+        psa_backend = 'facebook'
         access_token = serializer.data['access_token']
 
         redirect_uri = reverse('social:complete', args=(psa_backend,))
