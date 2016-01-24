@@ -36,6 +36,13 @@ class TestStoreList(ApiMixin):
         assert results[1]['id'] == medium.pk
         assert results[2]['id'] == farthest.pk
 
+    def test_coords_can_be_negative(self, hunter_client, client):
+        f.StoreFactory(address=True, address__coords=Point(100, 100))
+        r = hunter_client.get(self.reverse(query_params={'coords': '-50,-50'}))
+        h.responseOk(r)
+        results = r.data['results']
+        assert results[0]['distance'] is not None
+
     def test_includes_distance_field_on_results(self, hunter_client, client):
         f.StoreFactory(address=True, address__coords=Point(100, 100))
         r = hunter_client.get(self.reverse(query_params={'coords': '50,50'}))

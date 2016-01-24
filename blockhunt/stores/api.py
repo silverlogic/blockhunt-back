@@ -19,7 +19,7 @@ class StoreViewSet(mixins.RetrieveModelMixin,
     def filter_queryset(self, qs):
         coords = self.request.query_params.get('coords', None)
         if coords:
-            if re.match(r'[\d.]+,[\d.]+', coords):
+            if re.match(r'-?[\d.]+,-?[\d.]+', coords):
                 y, x = coords.split(',')
                 coords = Point(float(x), float(y), srid=4326)
                 qs = qs.annotate(distance=Distance('address__coords', coords)).order_by('distance')
