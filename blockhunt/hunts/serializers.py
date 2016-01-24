@@ -69,7 +69,7 @@ class CheckinSerializer(ExpanderSerializerMixin, serializers.ModelSerializer):
         print(hunter.coinbase_account_id)
 
         coinbase_address = dj_coinbase.client.create_address(hunter.coinbase_account_id)
-        dj_coinbase.send_money(
+        dj_coinbase.client.send_money(
             store.coinbase_account_id,
             to=coinbase_address.address,
             amount=str(store.bounty),
