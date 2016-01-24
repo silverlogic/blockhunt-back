@@ -25,3 +25,7 @@ class HunterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
+class HunterFacebookSerializer(serializers.Serializer):
+    access_token = serializers.CharField()

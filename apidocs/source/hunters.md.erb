@@ -39,6 +39,18 @@ Name | Type | Description
 `last_name` | `string` | If a name is not provided then a random name will be assigned.
 
 
+## Login with Facebook
+
+Returns an access token, same as the regular login view.
+
+    POST /hunters/facebook
+
+### Input
+
+Name | Type | Description
+---- | ---- | -----------
+`access_token` | `string` | access token returned from the facebook sdk.
+
 ## Retrieve Current Hunter
 
     GET /hunter
