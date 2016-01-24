@@ -11,6 +11,7 @@ class StoreAddressInline(admin.StackedInline):
 class StoreAdmin(admin.ModelAdmin):
     model = Store
     inlines = [StoreAddressInline]
+    readonly_fields = ('balance',)
 
 
 @admin.register(StoreCategory)

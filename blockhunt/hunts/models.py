@@ -7,10 +7,10 @@ from blockhunt.users.models import User
 
 class Hunter(User):
     balance = models.DecimalField(
-        max_digits=12, decimal_places=8, default=0, editable=False,
+        max_digits=12, decimal_places=8, default=0,
         help_text='The number of bitoins the hunter owns.'
     )
-    coinbase_account_id = models.CharField(max_length=100, editable=False)
+    coinbase_account_id = models.CharField(max_length=100, blank=True)
 
 
 class Checkin(TimeStampedModel):
