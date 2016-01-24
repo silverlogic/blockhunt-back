@@ -7,6 +7,7 @@ from django.contrib.gis.db.models.functions import Distance
 from rest_framework import mixins, viewsets, permissions, decorators, renderers
 from rest_framework.response import Response
 
+import dj_coinbase
 import qrcode
 
 from .models import Store, StoreCategory
@@ -44,6 +45,11 @@ class PngRenderer(renderers.BaseRenderer):
         return data
 
 
+class IsStoreOwner(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.user == request.user
+
+
 class StoreViewSet(MultiSerializerMixin,
                    mixins.CreateModelMixin,
                    mixins.RetrieveModelMixin,
@@ -70,8 +76,29 @@ class StoreViewSet(MultiSerializerMixin,
         img = qrcode.make(store.pk)
         output = BytesIO()
         img.save(output)
-        # import pdb; pdb.set_trace()
         return Response(output.getvalue())
+
+    @decorators.detail_route(methods=['POST'], permission_classes=[permissions.IsAuthenticated, IsStoreOwner])
+    def load_bitcoins(self, request, *args, **kwargs):
+        store = self.get_object()
+        if not store.coinbase_account_id:
+            coinbase_account = dj_coinbase.client.create_account(name='Store #' + str(store.pk))
+            store.coinbase_account_id = coinbase_account.id
+            store.save()
+
+        coinbase_address = dj_coinbase.client.create_address(store.coinbase_account_id)
+        return Response({'address': coinbase_address.address})
+
+
+class CoinbaseNotificationViewSet(mixins.CreateModelMixin,
+                                  viewsets.GenericViewSet):
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        print(data)
+        if data['type'] == dj_coinbase.NotificationType.ADDRESS_PAYMENT:
+            store = Store.objects.get(coinbase_account_id=data['account']['id'])
+            store.balance = data['account']['balance']['amount']
+            store.save()
 
 
 class StoreCategoryViewSet(mixins.RetrieveModelMixin,

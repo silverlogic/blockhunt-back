@@ -1,3 +1,4 @@
+coinbase==2.0.3
 dj-database-url==0.3.0
 Django==1.9.1
 django-model-utils==2.4

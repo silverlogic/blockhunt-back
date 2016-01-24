@@ -3,6 +3,7 @@ from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
 
+import dj_coinbase
 import dj_database_url
 
 
@@ -166,3 +167,19 @@ REST_FRAMEWORK = {
     'SEARCH_PARAM': 'q',
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
+
+
+# Coinbase
+def get_coinbase_environment():
+    coinbase_environment = env('COINBASE_ENVIRONMENT')
+    if coinbase_environment == 'sandbox':
+        return dj_coinbase.Environment.Sandbox
+    elif coinbase_environment == 'production':
+        return dj_coinbase.Environment.Production
+    raise ImproperlyConfigured('coinbase environment must be either "sandbox" or "production", not "{}"'.format(coinbase_environment))
+
+dj_coinbase.configure(
+    get_coinbase_environment(),
+    env('COINBASE_API_KEY'),
+    env('COINBASE_API_SECRET')
+)

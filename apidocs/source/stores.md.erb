@@ -45,7 +45,7 @@ Create a store owner with a store.
 
 Name | Type | Description
 ---- | ---- | -----------
-`email` | `string
+`email` | `string`
 `password` | `string`
 `store_name` | `string`
 `category` | `int`
@@ -81,6 +81,19 @@ Name | Type | Description
 ## Store Bounty QR Code
 
     GET /v1/stores/:id/qrcode
+
+
+## Store load bitcoins
+
+Returns the address to send the bitcoins to.
+
+    POST /v1/stores/:id/load-bitcoins
+
+### Response
+
+<%= json \
+  address: 'asdasdasd'
+%>
 
 
 [//]: # vim: set ft=markdown:

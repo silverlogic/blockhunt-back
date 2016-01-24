@@ -5,10 +5,12 @@ router = DefaultRouter(trailing_slash=False)
 
 
 # Stores
-from blockhunt.stores.api import StoreViewSet, StoreCategoryViewSet  # noqa
+from blockhunt.stores.api import StoreViewSet, StoreCategoryViewSet, \
+    CoinbaseNotificationViewSet  # noqa
 
 router.register(r'stores', StoreViewSet)
 router.register(r'store-categories', StoreCategoryViewSet)
+router.register(r'coinbase-notifications', CoinbaseNotificationViewSet, base_name='coinbase-notification')
 
 
 # Hunts

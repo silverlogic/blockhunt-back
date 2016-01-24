@@ -4,6 +4,7 @@ from django.db.models import F
 
 from rest_framework import serializers
 
+import dj_coinbase
 from expander import ExpanderSerializerMixin
 
 from blockhunt.stores.models import Store
@@ -59,6 +60,16 @@ class CheckinSerializer(ExpanderSerializerMixin, serializers.ModelSerializer):
         store = self.store
 
         hunter = self.context['request'].user
+        if not hunter.coinbase_account_id:
+            coinbase_account = dj_coinbase.client.create_account('Hunter #' + str(hunter.pk))
+            hunter.coinbase_account_id = coinbase_account.id
+
+        dj_coinbase.client.transfer_money(
+            store.coinbase_account_id,
+            to=hunter.coinbase_account_id,
+            amount=store.bounty,
+            currency='BTC'
+        )
         checkin = Checkin.objects.create(store=store,
                                          reward=store.bounty,
                                          hunter=hunter)
