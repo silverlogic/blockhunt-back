@@ -63,7 +63,7 @@ class TestHunterSelfRetrieve(ApiMixin):
     def test_object_keys(self, hunter_client):
         r = hunter_client.get(self.reverse())
         h.responseOk(r)
-        expected = {'id', 'email', 'first_name', 'last_name'}
+        expected = {'id', 'email', 'first_name', 'last_name', 'balance'}
         actual = set(r.data.keys())
         assert expected == actual
 

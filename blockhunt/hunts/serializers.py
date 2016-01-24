@@ -21,7 +21,8 @@ class HunterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hunter
-        fields = ('id', 'email', 'password', 'first_name', 'last_name')
+        fields = ('id', 'email', 'password', 'first_name', 'last_name', 'balance')
+        read_only_fields = ('balance',)
 
     def create(self, validated_data):
         if not validated_data.get('first_name') and not validated_data.get('last_name'):
