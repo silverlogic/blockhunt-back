@@ -99,6 +99,7 @@ class CoinbaseNotificationViewSet(mixins.CreateModelMixin,
             store = Store.objects.get(coinbase_account_id=data['account']['id'])
             store.balance = data['amount']['amount']
             store.save()
+        return Response()
 
 
 class StoreCategoryViewSet(mixins.RetrieveModelMixin,
