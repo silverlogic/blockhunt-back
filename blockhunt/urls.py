@@ -6,6 +6,7 @@ from .routers import router
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^v1/', include(router.urls)),
     url(r'^v1/auth/', include('timed_auth_token.urls', namespace='auth')),
 ]

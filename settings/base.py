@@ -45,6 +45,7 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'timed_auth_token',
     'polymorphic',
+    'social.apps.django_app.default',
 ]
 PROJECT_APPS = [
     'blockhunt.users',
@@ -68,6 +69,19 @@ MIDDLEWARE_CLASSES = [
 
 AUTH_PASSWORD_VALIDATORS = [
 ]
+
+# Social Auth
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['public_profile', 'email']
+SOCIAL_AUTH_FACEBOOK_KEY = env('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = env('SOCIAL_AUTH_FACEBOOK_SECRET')
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, email, first_name, last_name'
+}
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 
 TEMPLATES = [
