@@ -4,6 +4,7 @@ from django.db.models import F
 
 from rest_framework import serializers
 
+import coinbase.wallet.error
 import dj_coinbase
 from expander import ExpanderSerializerMixin
 
@@ -64,24 +65,21 @@ class CheckinSerializer(ExpanderSerializerMixin, serializers.ModelSerializer):
         if not hunter.coinbase_account_id:
             coinbase_account = dj_coinbase.client.create_account(name='Hunter #' + str(hunter.pk))
             hunter.coinbase_account_id = coinbase_account.id
-
-        print(store.coinbase_account_id)
-        print(hunter.coinbase_account_id)
+            hunter.save()
 
         coinbase_address = dj_coinbase.client.create_address(hunter.coinbase_account_id)
-        dj_coinbase.client.send_money(
-            store.coinbase_account_id,
-            to=coinbase_address.address,
-            amount=str(store.bounty),
-            currency='BTC'
-        )
 
-        # dj_coinbase.client.transfer_money(
-        #     store.coinbase_account_id,
-        #     to=hunter.coinbase_account_id,
-        #     amount=str(store.bounty),
-        #     currency='BTC'
-        # )
+        try:
+            dj_coinbase.client.send_money(
+                store.coinbase_account_id,
+                to=coinbase_address.address,
+                amount=str(store.bounty),
+                currency='BTC',
+                fee='0.0001'
+            )
+        except coinbase.wallet.error.APIError as ex:
+            raise serializers.ValidationError(ex.message)
+
         checkin = Checkin.objects.create(store=store,
                                          reward=store.bounty,
                                          hunter=hunter)

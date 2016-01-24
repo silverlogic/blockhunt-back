@@ -3,9 +3,10 @@ import logging
 from django.core.urlresolvers import reverse
 from django.db.models import F
 
-from rest_framework import mixins, viewsets, permissions, decorators, status
+from rest_framework import mixins, viewsets, permissions, decorators, status, serializers
 from rest_framework.response import Response
 
+import coinbase.wallet.error
 import dj_coinbase
 from requests.exceptions import HTTPError
 from social.apps.django_app.utils import load_strategy, load_backend
@@ -66,13 +67,17 @@ class HunterSelfViewSet(mixins.ListModelMixin,
     def send_bitcoin(self, request, *args, **kwargs):
         serializer = SendBitcoinSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        hunter = request.user
-        dj_coinbase.client.send_money(
-            hunter.coinbase_account_id,
-            to=serializer.data['address'],
-            amount=serializer.data['amount'],
-            currency='BTC'
-        )
+        try:
+            hunter = request.user
+            dj_coinbase.client.send_money(
+                hunter.coinbase_account_id,
+                to=serializer.data['address'],
+                amount=serializer.data['amount'],
+                currency='BTC',
+                fee='0.0001'
+            )
+        except coinbase.wallet.error.APIError as ex:
+            raise serializers.ValidationError(ex.message)
         hunter.balance = F('balance') - serializer.data['amount']
         hunter.save()
         return Response()
