@@ -62,7 +62,7 @@ class CheckinSerializer(ExpanderSerializerMixin, serializers.ModelSerializer):
 
         hunter = self.context['request'].user
         if not hunter.coinbase_account_id:
-            coinbase_account = dj_coinbase.client.create_account('Hunter #' + str(hunter.pk))
+            coinbase_account = dj_coinbase.client.create_account(name='Hunter #' + str(hunter.pk))
             hunter.coinbase_account_id = coinbase_account.id
 
         dj_coinbase.client.transfer_money(

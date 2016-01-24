@@ -11,7 +11,6 @@ from rest_framework.response import Response
 import dj_coinbase
 import qrcode
 
-from blockhunt.hunts.models import Hunter
 from .models import Store, StoreCategory
 from .serializers import StoreSerializer, StoreCategorySerializer, StoreCreateSerializer
 
@@ -99,14 +98,9 @@ class CoinbaseNotificationViewSet(mixins.CreateModelMixin,
         print(data)
         if data['type'] == dj_coinbase.NotificationType.ADDRESS_PAYMENT:
             coinbase_account_id = data['account']['id']
-            try:
-                store = Store.objects.get(coinbase_account_id=coinbase_account_id)
-                store.balance = F('balance') + data['amount']['amount']
-                store.save()
-            except Store.DoesNotExist:
-                hunter = Hunter.objects.get(coinbase_account_id=coinbase_account_id)
-                hunter.balance = F('balance') + data['amount']['amount']
-                hunter.save()
+            store = Store.objects.get(coinbase_account_id=coinbase_account_id)
+            store.balance = F('balance') + data['amount']['amount']
+            store.save()
         return Response()
 
 
