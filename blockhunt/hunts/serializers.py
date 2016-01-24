@@ -65,6 +65,8 @@ class CheckinSerializer(ExpanderSerializerMixin, serializers.ModelSerializer):
             coinbase_account = dj_coinbase.client.create_account(name='Hunter #' + str(hunter.pk))
             hunter.coinbase_account_id = coinbase_account.id
 
+        print(store.coinbase_account_id)
+        print(hunter.coinbase_account_id)
         dj_coinbase.client.transfer_money(
             store.coinbase_account_id,
             to=hunter.coinbase_account_id,
