@@ -97,7 +97,7 @@ class CoinbaseNotificationViewSet(mixins.CreateModelMixin,
         print(data)
         if data['type'] == dj_coinbase.NotificationType.ADDRESS_PAYMENT:
             store = Store.objects.get(coinbase_account_id=data['account']['id'])
-            store.balance = data['account']['balance']['amount']
+            store.balance = data['amount']['amount']
             store.save()
 
 
