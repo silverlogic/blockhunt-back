@@ -55,6 +55,13 @@ module Resources
       token: "lkja8*lkajsd*lkjas;ldkj8asd;kJASd811"
   }
 
+  HUNTER ||= {
+      id: 1,
+      email: 'huntsman@gmail.com',
+      first_name: 'Robin',
+      last_name: 'Bitly'
+  }
+
   STORE ||= {
       id: 1,
       name: 'Dennys',

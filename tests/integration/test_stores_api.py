@@ -9,26 +9,6 @@ from tests.mixins import ApiMixin
 pytestmark = pytest.mark.django_db
 
 
-# class TestStoreCreate(ApiMixin):
-#     view_name = 'store-list'
-
-#     @pytest.fixture
-#     def data(self, image):
-#         category = f.StoreCategoryFactory()
-#         return {
-#             'name': 'Dennys',
-#             'photo': image,
-#             'category': category.pk,
-#         }
-
-#     def test_guest_cant_create(self, client, data):
-#         r = client.post(self.reverse(), data)
-#         h.responseUnauthorized(r)
-
-#     def test_store_owner_can_create(self, store_owner_client):
-#         pass
-
-
 class TestStoreList(ApiMixin):
     view_name = 'store-list'
 
