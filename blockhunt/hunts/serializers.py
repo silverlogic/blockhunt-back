@@ -67,12 +67,21 @@ class CheckinSerializer(ExpanderSerializerMixin, serializers.ModelSerializer):
 
         print(store.coinbase_account_id)
         print(hunter.coinbase_account_id)
-        dj_coinbase.client.transfer_money(
+
+        coinbase_address = dj_coinbase.client.create_address(hunter.coinbase_account_id)
+        dj_coinbase.send_money(
             store.coinbase_account_id,
-            to=hunter.coinbase_account_id,
+            to=coinbase_address.address,
             amount=str(store.bounty),
             currency='BTC'
         )
+
+        # dj_coinbase.client.transfer_money(
+        #     store.coinbase_account_id,
+        #     to=hunter.coinbase_account_id,
+        #     amount=str(store.bounty),
+        #     currency='BTC'
+        # )
         checkin = Checkin.objects.create(store=store,
                                          reward=store.bounty,
                                          hunter=hunter)
